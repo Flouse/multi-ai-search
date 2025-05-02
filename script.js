@@ -29,10 +29,12 @@ function openAll() {
   );
 
   urls.forEach((url) => {
-    window.open(url, "_blank");
     // Adding a small delay *might* sometimes help with pop-up blockers,
     // but it's unreliable and generally not recommended.
-    // setTimeout(() => window.open(url, '_blank'), 100);
+    setTimeout(() => {
+      console.log(`Opening tab for URL: ${url}`);
+      window.open(url, '_blank');
+    }, Math.floor(Math.random() * 400 + 100));
   });
 }
 
