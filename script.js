@@ -33,7 +33,13 @@ function openAll() {
     // but it's unreliable and generally not recommended.
     setTimeout(() => {
       console.log(`Opening tab for URL: ${url}`);
-      window.open(url, '_blank');
+      const newTab = window.open(url, '_blank');
+      if (newTab) {
+        // Attempt to keep focus on the original window. This might result
+        // in the new tab opening in the background, but behavior varies
+        // across browsers and settings and is not guaranteed.
+        window.focus();
+      }
     }, Math.floor(Math.random() * 400 + 100));
   });
 }
