@@ -1,10 +1,10 @@
 # multi-ai-search
 
-Simple web app to search multiple AI engines at once.
+Simple web app to search multiple (customizable) AI engines simultaneously with one click.
 
 ## TODO
 
-- [ ] Allow users to customize/save their preferred engine list (using localStorage)
+- [x] Allow users to customize/save their preferred engine list (using localStorage)
 - [ ] Add more search engines (e.g., Claude, Grok - if URL params allow)
 - [ ] Support choose suitable engines using AI algorithms
 - [ ] Improve UI feedback (e.g., "opening tabs..." message)
