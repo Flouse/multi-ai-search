@@ -101,6 +101,63 @@ button:active {
     padding: 2rem;
 }
 
+#engine-options-container {
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    background-color: #fff; /* Slightly different background for contrast */
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    max-width: 600px; /* Match input width */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#engine-options-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem; /* Slightly smaller than main H1 */
+    color: var(--secondary-color); /* Use a theme color */
+    background: none; /* Override h1 gradient */
+    -webkit-background-clip: initial;
+    background-clip: initial;
+}
+
+#engine-choices {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(150px, 1fr)
+    ); /* Responsive grid */
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.engine-choice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.engine-choice label {
+    cursor: pointer;
+    flex-grow: 1; /* Allow label to take space */
+}
+
+.engine-choice input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: var(--primary-color); /* Color the checkmark */
+    width: 1.2em;
+    height: 1.2em;
+}
+
+.prefs-note,
+.popup-note {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9em;
+    color: #6c757d; /* Muted color */
+}
+
 /* === RESPONSIVE DESIGN === */
 @media (max-width: 768px) {
     body {
