@@ -4,7 +4,7 @@ function openAll() {
 
   if (!query) {
     alert("Please enter a search query.");
-    queryInput.focus(); // Optional: put focus back on the input
+    queryInput.focus();
     return;
   }
 
