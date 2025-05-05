@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // Define default selected engines if none are saved
-    const DEFAULT_SELECTED_IDS = ['brave', 'perplexity', 'bing'];
+    const DEFAULT_SELECTED_IDS = ['brave', 'google', 'bing'];
 
     // --- DOM Elements ---
     const queryInput = document.getElementById('query');
