@@ -2,13 +2,27 @@
 
 Simple web app to search multiple (customizable) AI engines simultaneously with one click.
 
+## Features
+- Support multiple AI search engines and General Search Engines (TODO: add a screenshot)
+  - Brave Search
+  - Perplexity
+  - Phind
+  - You.com
+  - ChatGPT (No Direct Search)
+  - DuckDuckGo
+  - Bing
+  - Google
+  - Startpage (Private Google)
+  - Ecosia (Eco-friendly)
+  - Qwant (Privacy)
+  - Wikipedia
+  - WolframAlpha (Compute)
+  - GitHub (Code Repos)
+  - Google Scholar
+  - Semantic Scholar
+- Allow users to customize/save their preferred engine list (using localStorage)
+
 ## TODO
-
-- [x] Allow users to customize/save their preferred engine list (using localStorage)
-- [x] Add more search engines base on the research of https://github.com/CaraJ7/MMSearch
-  - https://mmsearch.github.io
-
-- [ ] format code
 
 - [ ] Add more known AI search engines if URL params allow
   * Claude
@@ -16,7 +30,6 @@ Simple web app to search multiple (customizable) AI engines simultaneously with 
   * SourceGraph
   * https://yep.com/chat/?q=%s
   * https://sourcegraph.com/search?q=%s
-  * https://duckduckgo.com/?q=%s&assist=true
 
 - [ ] Support Progressive Web App (PWA)
   * creating a web app manifest
@@ -26,4 +39,3 @@ Simple web app to search multiple (customizable) AI engines simultaneously with 
 - [ ] Support choose suitable engines using AI algorithms
 - [ ] Improve UI feedback (e.g., "opening tabs..." message)
 - [ ] Add dark mode toggle using CSS variables
-- [ ] Refactor JS for better modularity (e.g., separate URL generation)
