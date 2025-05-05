@@ -101,13 +101,14 @@ button:active {
     padding: 2rem;
 }
 
+/* Styling for the overall container holding engine options */
 #engine-options-container {
     margin-top: 2.5rem;
     padding: 1.5rem;
-    background-color: #fff; /* Slightly different background for contrast */
+    background-color: #fff;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    max-width: 600px; /* Match input width */
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -115,20 +116,41 @@ button:active {
 #engine-options-container h2 {
     text-align: center;
     margin-bottom: 1.5rem;
-    font-size: 1.5rem; /* Slightly smaller than main H1 */
-    color: var(--secondary-color); /* Use a theme color */
-    background: none; /* Override h1 gradient */
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    background: none;
     -webkit-background-clip: initial;
     background-clip: initial;
 }
 
-#engine-choices {
+/* Styling for each category group (the <fieldset> element) */
+.engine-category {
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+    margin-bottom: 1.5rem;
+    background-color: #fdfdfd;
+}
+
+/* Styling for the category title (the <legend> element) */
+.engine-category legend {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    padding: 0 0.5rem;
+    margin-left: -0.5rem; /* Negative margin to align with fieldset padding */
+}
+
+/* Styling for the grid container *inside* each fieldset (holds the checkboxes) */
+.engine-category-grid {
     display: grid;
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(150px, 1fr)
-    ); /* Responsive grid */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
+    margin-top: 1rem; /* Space between legend and checkboxes */
+}
+
+/* Styles for the container that *was* the grid, now holds fieldsets */
+#engine-choices {
     margin-bottom: 1rem;
 }
 

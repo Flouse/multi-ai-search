@@ -9,21 +9,25 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       id: "brave",
       name: "Brave Search",
+      category: "AI & Chat",
       urlTemplate: "https://search.brave.com/search?q={query}&summary=1",
     },
     {
       id: "perplexity",
       name: "Perplexity",
+      category: "AI & Chat",
       urlTemplate: "https://www.perplexity.ai/search?q={query}",
     },
     {
       id: "phind",
       name: "Phind",
+      category: "AI & Chat",
       urlTemplate: "https://phind.com/search?q={query}",
     },
     {
       id: "you",
       name: "You.com",
+      category: "AI & Chat",
       urlTemplate: "https://you.com/search?q={query}",
     },
     // Note: ChatGPT's official site doesn't support direct URL query parameters
@@ -31,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       id: "chatgpt",
       name: "ChatGPT (No Direct Search)",
+      category: "AI & Chat",
       urlTemplate: "https://chatgpt.com/",
     },
 
@@ -38,31 +43,37 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       id: "duckduckgo",
       name: "DuckDuckGo",
+      category: "General",
       urlTemplate: "https://duckduckgo.com/?q={query}&assist=true",
     },
     {
       id: "bing",
       name: "Bing",
+      category: "General",
       urlTemplate: "https://www.bing.com/search?q={query}",
     },
     {
       id: "google",
       name: "Google",
+      category: "General",
       urlTemplate: "https://www.google.com/search?q={query}",
     },
     {
       id: "startpage",
       name: "Startpage (Private Google)",
+      category: "General",
       urlTemplate: "https://www.startpage.com/sp/search?query={query}",
     },
     {
       id: "ecosia",
       name: "Ecosia (Eco-friendly)",
+      category: "General",
       urlTemplate: "https://www.ecosia.org/search?q={query}",
     },
     {
       id: "qwant",
       name: "Qwant (Privacy)",
+      category: "General",
       urlTemplate: "https://www.qwant.com/?q={query}",
     }, // European privacy engine
 
@@ -70,26 +81,32 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       id: "wikipedia",
       name: "Wikipedia",
+      category: "Specialized",
       urlTemplate: "https://en.wikipedia.org/w/index.php?search={query}",
     },
     {
       id: "wolframalpha",
       name: "WolframAlpha (Compute)",
+      category: "Specialized",
+      // Note: 'i' parameter
       urlTemplate: "https://www.wolframalpha.com/input?i={query}",
-    }, // Note 'i' parameter
+    },
     {
       id: "github",
       name: "GitHub (Code Repos)",
+      category: "Specialized",
       urlTemplate: "https://github.com/search?q={query}",
     },
     {
       id: "googlescholar",
       name: "Google Scholar",
+      category: "Specialized",
       urlTemplate: "https://scholar.google.com/scholar?q={query}",
     },
     {
       id: "semanticscholar",
       name: "Semantic Scholar",
+      category: "Specialized",
       urlTemplate: "https://www.semanticscholar.org/search?q={query}",
     },
 
@@ -161,42 +178,82 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /**
-   * Renders the checkboxes for engine selection.
+   * Renders the checkboxes for engine selection, grouped by category.
    * @param {string[]} selectedIds Array of currently selected engine IDs.
    */
   function renderEngineChoices(selectedIds) {
-    engineChoicesContainer.innerHTML = ""; // Clear previous content
-    engineChoicesContainer.setAttribute("role", "group");
-    engineChoicesContainer.setAttribute(
-      "aria-labelledby",
-      "customize-engines-heading",
-    );
+    engineChoicesContainer.innerHTML = "";
 
-    ALL_ENGINES.forEach((engine) => {
-      const isChecked = selectedIds.includes(engine.id);
+    // Group engines by category
+    const enginesByCategory = ALL_ENGINES.reduce((acc, engine) => {
+      const category = engine.category || "Other"; // Default category if missing
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(engine);
+      return acc;
+    }, {});
 
-      const wrapper = document.createElement("div");
-      wrapper.className = "engine-choice";
+    // Define the order in which categories should appear (optional)
+    const categoryOrder = ["AI & Chat", "General", "Specialized", "Other"];
 
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.id = `engine-${engine.id}`;
-      checkbox.value = engine.id;
-      checkbox.checked = isChecked;
+    // Remove the group role and aria-labelledby from the main container,
+    // as fieldset/legend will handle grouping now.
+    engineChoicesContainer.removeAttribute("role");
+    engineChoicesContainer.removeAttribute("aria-labelledby");
 
-      const label = document.createElement("label");
-      label.htmlFor = `engine-${engine.id}`;
-      label.textContent = engine.name;
+    // Get the main heading for context (optional, but good practice)
+    const mainHeading = document.querySelector("#engine-options-container h2");
+    if (mainHeading) mainHeading.id = "customize-engines-heading"; // Ensure it has an ID
 
-      checkbox.addEventListener("change", handleCheckboxChange);
+    // Render each category
+    categoryOrder.forEach((categoryName) => {
+      if (enginesByCategory[categoryName]) {
+        const engines = enginesByCategory[categoryName];
 
-      wrapper.appendChild(checkbox);
-      wrapper.appendChild(label);
-      engineChoicesContainer.appendChild(wrapper);
+        // Create fieldset for the category
+        const fieldset = document.createElement("fieldset");
+        fieldset.className = "engine-category";
+
+        // Create legend for the category name
+        const legend = document.createElement("legend");
+        legend.textContent = categoryName;
+        fieldset.appendChild(legend);
+
+        // Create a container for the checkboxes within this category (for grid layout)
+        const categoryGrid = document.createElement("div");
+        categoryGrid.className = "engine-category-grid";
+
+        // Render checkboxes for engines in this category
+        engines.forEach((engine) => {
+          const isChecked = selectedIds.includes(engine.id);
+
+          const wrapper = document.createElement("div");
+          wrapper.className = "engine-choice";
+
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.id = `engine-${engine.id}`;
+          checkbox.value = engine.id;
+          checkbox.checked = isChecked;
+
+          const label = document.createElement("label");
+          label.htmlFor = `engine-${engine.id}`;
+          label.textContent = engine.name;
+
+          // Attach the same change handler
+          checkbox.addEventListener("change", handleCheckboxChange);
+
+          wrapper.appendChild(checkbox);
+          wrapper.appendChild(label);
+          categoryGrid.appendChild(wrapper);
+        });
+
+        fieldset.appendChild(categoryGrid); // Append grid to the fieldset
+        engineChoicesContainer.appendChild(fieldset); // Append fieldset to the main container
+      }
     });
-
-    const heading = document.querySelector("#engine-options-container h2");
-    if (heading) heading.id = "customize-engines-heading";
+    // --- End Added/Modified ---
   }
 
   /**
@@ -235,11 +292,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const urlsToOpen = ALL_ENGINES.filter((engine) =>
       selectedIds.includes(engine.id),
     ).map((engine) => {
-      if (engine.urlTemplate.includes('{query}')) {
-         return engine.urlTemplate.replace('{query}', encodedQuery);
+      if (engine.urlTemplate.includes("{query}")) {
+        return engine.urlTemplate.replace("{query}", encodedQuery);
       }
 
-      console.warn(`Engine "${engine.name}" (${engine.id}) does not appear to support direct query parameters in its template.`);
+      console.warn(
+        `Engine "${engine.name}" (${engine.id}) does not appear to support direct query parameters in its template.`,
+      );
       return engine.urlTemplate; // Return template as is
     });
 
@@ -263,7 +322,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    console.log(`Attempting to open ${urlsToOpen.length} tabs for query: "${query}"`);
+    console.log(
+      `Attempting to open ${urlsToOpen.length} tabs for query: "${query}"`,
+    );
 
     // IMPORTANT: Browser pop-up blockers will likely interfere with opening multiple tabs simultaneously.
     // The user will need to allow pop-ups for this page.
@@ -272,16 +333,18 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         console.log(`Opening tab ${index + 1}/${urlsToOpen.length}: ${url}`);
         const newTab = window.open(url, "_blank");
-         if (!newTab || newTab.closed || typeof newTab.closed == 'undefined') {
-            // Browser blocked the pop-up
-            console.warn(`Pop-up blocked for URL: ${url}. User needs to allow pop-ups for this site.`);
-            // Optionally, alert the user here, but it might get annoying
-            // if multiple are blocked:
-            // if (index === 0) alert("Please allow pop-ups in your browser to open all tabs.");
-         } else {
-             // Optional: Try to keep focus on the original window (behavior varies)
-             window.focus();
-         }
+        if (!newTab || newTab.closed || typeof newTab.closed == "undefined") {
+          // Browser blocked the pop-up
+          console.warn(
+            `Pop-up blocked for URL: ${url}. User needs to allow pop-ups for this site.`,
+          );
+          // Optionally, alert the user here, but it might get annoying
+          // if multiple are blocked:
+          // if (index === 0) alert("Please allow pop-ups in your browser to open all tabs.");
+        } else {
+          // Optional: Try to keep focus on the original window (behavior varies)
+          window.focus();
+        }
       }, index * 150); // 150ms delay between each tab opening
     });
 
