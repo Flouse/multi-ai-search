@@ -4,25 +4,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Define all available search engines
     const ALL_ENGINES = [
+        // --- AI Focused / Chat ---
         { id: 'brave', name: 'Brave Search', urlTemplate: 'https://search.brave.com/search?q={query}&summary=1' },
         { id: 'perplexity', name: 'Perplexity', urlTemplate: 'https://www.perplexity.ai/search?q={query}' },
-        { id: 'you', name: 'You.com', urlTemplate: 'https://you.com/search?q={query}' },
         { id: 'phind', name: 'Phind', urlTemplate: 'https://phind.com/search?q={query}' },
+        { id: 'you', name: 'You.com', urlTemplate: 'https://you.com/search?q={query}' },
+        // TODO: Still likely won't auto-search
+        { id: 'chatgpt', name: 'ChatGPT (WIP)', urlTemplate: 'https://chatgpt.com/?q={query}' },
 
-        // Traditional search engines
+        // --- General Search Engines ---
         { id: 'duckduckgo', name: 'DuckDuckGo', urlTemplate: 'https://duckduckgo.com/?q={query}&assist=true' },
         { id: 'bing', name: 'Bing', urlTemplate: 'https://www.bing.com/search?q={query}' },
         { id: 'google', name: 'Google', urlTemplate: 'https://www.google.com/search?q={query}' },
+        { id: 'startpage', name: 'Startpage (Private Google)', urlTemplate: 'https://www.startpage.com/sp/search?query={query}' },
+        { id: 'ecosia', name: 'Ecosia (Eco-friendly)', urlTemplate: 'https://www.ecosia.org/search?q={query}' },
+        { id: 'qwant', name: 'Qwant (Privacy)', urlTemplate: 'https://www.qwant.com/?q={query}' }, // European privacy engine
 
-        // TODO: Still likely won't auto-search
-        { id: 'chatgpt', name: 'ChatGPT', urlTemplate: 'https://chatgpt.com/?q={query}' },
+        // --- Specialized / Reference ---
+        { id: 'wikipedia', name: 'Wikipedia', urlTemplate: 'https://en.wikipedia.org/w/index.php?search={query}' },
+        { id: 'wolframalpha', name: 'WolframAlpha (Compute)', urlTemplate: 'https://www.wolframalpha.com/input?i={query}' }, // Note 'i' parameter
+        { id: 'github', name: 'GitHub (Code Repos)', urlTemplate: 'https://github.com/search?q={query}' },
+        { id: 'googlescholar', name: 'Google Scholar', urlTemplate: 'https://scholar.google.com/scholar?q={query}' },
+        { id: 'semanticscholar', name: 'Semantic Scholar', urlTemplate: 'https://www.semanticscholar.org/search?q={query}' },
 
-        // Add more engines here if desired
-        // { id: 'duckduckgo', name: 'DuckDuckGo', urlTemplate: 'https://duckduckgo.com/?q={query}' },
+        // Add more engines here if desired, following the format:
+        // { id: 'unique-id', name: 'Display Name', urlTemplate: 'https://example.com/search?query={query}' },
     ];
 
     // Define default selected engines if none are saved
-    const DEFAULT_SELECTED_IDS = ['brave', 'google', 'bing'];
+    const DEFAULT_SELECTED_IDS = ['brave', 'google', 'bing', 'duckduckgo', 'wikipedia'];
 
     // --- DOM Elements ---
     const queryInput = document.getElementById('query');
@@ -40,19 +50,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
-                // Basic validation: ensure it's an array of strings
                 if (Array.isArray(parsed) && parsed.every(item => typeof item === 'string')) {
-                     // Further validation: Ensure saved IDs still exist in ALL_ENGINES
                      const validSavedIds = parsed.filter(id => ALL_ENGINES.some(engine => engine.id === id));
                      if (validSavedIds.length > 0) {
                         return validSavedIds;
+                     } else {
+                        console.warn("Saved preferences contained only invalid/obsolete engine IDs. Reverting to default.");
                      }
+                } else {
+                    console.warn("Invalid data format in localStorage. Reverting to default.");
                 }
             } catch (e) {
                 console.error("Error parsing saved preferences:", e);
             }
         }
-        return DEFAULT_SELECTED_IDS;
+        // Return default if nothing saved, parsing failed, data invalid, or only obsolete IDs saved
+        console.log("Using default engine selection.");
+        // Make a copy to prevent accidental modification of the original default array
+        return [...DEFAULT_SELECTED_IDS]; // Use spread to copy
     }
 
     /**
@@ -70,31 +85,34 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function renderEngineChoices(selectedIds) {
         engineChoicesContainer.innerHTML = ''; // Clear previous content
+        engineChoicesContainer.setAttribute('role', 'group');
+        engineChoicesContainer.setAttribute('aria-labelledby', 'customize-engines-heading');
 
         ALL_ENGINES.forEach(engine => {
             const isChecked = selectedIds.includes(engine.id);
 
             const wrapper = document.createElement('div');
-            wrapper.className = 'engine-choice'; // For styling
+            wrapper.className = 'engine-choice';
 
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.id = `engine-${engine.id}`;
             checkbox.value = engine.id;
             checkbox.checked = isChecked;
-            checkbox.setAttribute('aria-label', engine.name); // Accessibility
 
             const label = document.createElement('label');
             label.htmlFor = `engine-${engine.id}`;
             label.textContent = engine.name;
 
-            // Add event listener to save preferences when a box is checked/unchecked
             checkbox.addEventListener('change', handleCheckboxChange);
 
             wrapper.appendChild(checkbox);
             wrapper.appendChild(label);
             engineChoicesContainer.appendChild(wrapper);
         });
+
+        const heading = document.querySelector('#engine-options-container h2');
+        if(heading) heading.id = 'customize-engines-heading';
     }
 
     /**
@@ -122,6 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (selectedIds.length === 0) {
              alert('Please select at least one search engine in the "Customize Engines" section.');
+             const firstCheckbox = engineChoicesContainer.querySelector('input[type="checkbox"]');
+             if(firstCheckbox) firstCheckbox.focus();
              return;
         }
 
@@ -157,6 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     queryInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
+            e.preventDefault();
             openSelectedTabs();
         }
     });
