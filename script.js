@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const STORAGE_KEY = "multiAiSearchSelectedEngines";
 
   // Define all available search engines
+  // { id: 'unique-id', name: 'Display Name', urlTemplate: 'URL with {query} placeholder' }
   const ALL_ENGINES = [
     // --- AI Focused / Chat ---
     {
@@ -25,11 +26,12 @@ document.addEventListener("DOMContentLoaded", () => {
       name: "You.com",
       urlTemplate: "https://you.com/search?q={query}",
     },
-    // TODO: Still likely won't auto-search
+    // Note: ChatGPT's official site doesn't support direct URL query parameters
+    // This link will likely just open the main ChatGPT interface.
     {
       id: "chatgpt",
-      name: "ChatGPT (WIP)",
-      urlTemplate: "https://chatgpt.com/?q={query}",
+      name: "ChatGPT (No Direct Search)",
+      urlTemplate: "https://chatgpt.com/",
     },
 
     // --- General Search Engines ---
@@ -211,16 +213,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /**
-   * Opens search tabs for the selected engines.
+   * Generates the list of URLs for the currently selected engines and query.
+   * @param {string} query - The user's search query (trimmed).
+   * @returns {string[]} Array of URLs to open.
    */
-  function openSelectedTabs() {
-    const query = queryInput.value.trim();
-    if (!query) {
-      alert("Please enter a search query.");
-      queryInput.focus();
-      return;
-    }
-
+  function getSelectedEngineUrls(query) {
     const encodedQuery = encodeURIComponent(query);
     const selectedIds = loadPreferences(); // Get the latest saved preferences
 
@@ -232,23 +229,59 @@ document.addEventListener("DOMContentLoaded", () => {
         'input[type="checkbox"]',
       );
       if (firstCheckbox) firstCheckbox.focus();
-      return;
+      return []; // Return empty array if no engines selected
     }
 
     const urlsToOpen = ALL_ENGINES.filter((engine) =>
       selectedIds.includes(engine.id),
-    ).map((engine) => engine.urlTemplate.replace("{query}", encodedQuery)); // Build URLs
+    ).map((engine) => {
+      if (engine.urlTemplate.includes('{query}')) {
+         return engine.urlTemplate.replace('{query}', encodedQuery);
+      }
 
-    console.log(`Opening ${urlsToOpen.length} tabs for query: "${query}"`);
-    console.log("Selected engines:", selectedIds);
+      console.warn(`Engine "${engine.name}" (${engine.id}) does not appear to support direct query parameters in its template.`);
+      return engine.urlTemplate; // Return template as is
+    });
 
+    return urlsToOpen;
+  }
+
+  /**
+   * Opens search tabs for the selected engines.
+   */
+  function openSelectedTabs() {
+    const query = queryInput.value.trim();
+    if (!query) {
+      alert("Please enter a search query.");
+      queryInput.focus();
+      return;
+    }
+
+    const urlsToOpen = getSelectedEngineUrls(query);
+    if (urlsToOpen.length === 0) {
+      console.log("No URLs generated or selected engines found.");
+      return;
+    }
+
+    console.log(`Attempting to open ${urlsToOpen.length} tabs for query: "${query}"`);
+
+    // IMPORTANT: Browser pop-up blockers will likely interfere with opening multiple tabs simultaneously.
+    // The user will need to allow pop-ups for this page.
+    // Adding a small, increasing delay *might* slightly improve behavior in some cases, but is not a guarantee.
     urlsToOpen.forEach((url, index) => {
-      // Using a small, increasing delay *might* slightly improve behavior
-      // with pop-up blockers in some cases, but isn't a guarantee.
-      // Random delay was less predictable. Let's try incremental.
       setTimeout(() => {
         console.log(`Opening tab ${index + 1}/${urlsToOpen.length}: ${url}`);
-        window.open(url, "_blank");
+        const newTab = window.open(url, "_blank");
+         if (!newTab || newTab.closed || typeof newTab.closed == 'undefined') {
+            // Browser blocked the pop-up
+            console.warn(`Pop-up blocked for URL: ${url}. User needs to allow pop-ups for this site.`);
+            // Optionally, alert the user here, but it might get annoying
+            // if multiple are blocked:
+            // if (index === 0) alert("Please allow pop-ups in your browser to open all tabs.");
+         } else {
+             // Optional: Try to keep focus on the original window (behavior varies)
+             window.focus();
+         }
       }, index * 150); // 150ms delay between each tab opening
     });
 
@@ -267,7 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   queryInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
-      e.preventDefault();
+      e.preventDefault(); // Prevent potential form submission if wrapped in a form later
       openSelectedTabs();
     }
   });
