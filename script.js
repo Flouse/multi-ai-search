@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'perplexity', name: 'Perplexity', urlTemplate: 'https://www.perplexity.ai/search?q={query}' },
         { id: 'you', name: 'You.com', urlTemplate: 'https://you.com/search?q={query}' },
         { id: 'phind', name: 'Phind', urlTemplate: 'https://phind.com/search?q={query}' },
+
+        // Traditional search engines
+        { id: 'duckduckgo', name: 'DuckDuckGo', urlTemplate: 'https://duckduckgo.com/?q={query}&assist=true' },
         { id: 'bing', name: 'Bing', urlTemplate: 'https://www.bing.com/search?q={query}' },
         { id: 'google', name: 'Google', urlTemplate: 'https://www.google.com/search?q={query}' },
 
