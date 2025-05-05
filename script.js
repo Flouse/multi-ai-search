@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Define all available search engines
     const ALL_ENGINES = [
-        { id: 'brave', name: 'Brave Search', urlTemplate: 'https://search.brave.com/search?q={query}' },
+        { id: 'brave', name: 'Brave Search', urlTemplate: 'https://search.brave.com/search?q={query}&summary=1' },
         { id: 'perplexity', name: 'Perplexity', urlTemplate: 'https://www.perplexity.ai/search?q={query}' },
         { id: 'you', name: 'You.com', urlTemplate: 'https://you.com/search?q={query}' },
         { id: 'phind', name: 'Phind', urlTemplate: 'https://phind.com/search?q={query}' },
