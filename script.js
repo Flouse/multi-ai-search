@@ -44,6 +44,12 @@ document.addEventListener("DOMContentLoaded", () => {
       category: "AI & Chat",
       urlTemplate: "https://grok.com/?q={query}",
     },
+    {
+      id: "yepchat",
+      name: "Yep Chat",
+      category: "AI & Chat",
+      urlTemplate: "https://yep.com/chat/?q={query}",
+    },
 
     // --- General Search Engines ---
     {
@@ -114,6 +120,12 @@ document.addEventListener("DOMContentLoaded", () => {
       name: "Semantic Scholar",
       category: "Specialized",
       urlTemplate: "https://www.semanticscholar.org/search?q={query}",
+    },
+    {
+      id: "sourcegraph",
+      name: "SourceGraph",
+      category: "Specialized",
+      urlTemplate: "https://sourcegraph.com/search?q={query}",
     },
 
     // Add more engines here if desired, following the format:

@@ -21,21 +21,25 @@ Simple web app to search multiple (customizable) AI engines simultaneously with 
   - GitHub (Code Repos)
   - Google Scholar
   - Semantic Scholar
+  - Yep Chat
+  - SourceGraph
 - Allow users to customize/save their preferred engine list (using localStorage)
 
 ## TODO
 
 - [ ] Add more known AI search engines if URL params allow
   * Claude
-  * SourceGraph
-  * https://yep.com/chat/?q=%s
-  * https://sourcegraph.com/search?q=%s
 
+- [ ] Support choose suitable engines using AI algorithms
+  - Given search string or question, suggest which engines should be used
+    E.g.
+    a. query a word -> wiki, translator
+    b. input is a question -> AI search
+    c. understand the question using Gemini flash 2.5 and refactor the question and add context
 - [ ] Support Progressive Web App (PWA)
   * creating a web app manifest
   * adding a service worker
   * ensuring your app is served over HTTPS
 
-- [ ] Support choose suitable engines using AI algorithms
 - [ ] Improve UI feedback (e.g., "opening tabs..." message)
 - [ ] Add dark mode toggle using CSS variables
