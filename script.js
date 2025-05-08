@@ -38,6 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
       category: "AI & Chat",
       urlTemplate: "https://chatgpt.com/",
     },
+    {
+      id: "grok",
+      name: "Grok",
+      category: "AI & Chat",
+      urlTemplate: "https://grok.com/?q={query}",
+    },
 
     // --- General Search Engines ---
     {

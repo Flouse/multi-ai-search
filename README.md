@@ -9,6 +9,7 @@ Simple web app to search multiple (customizable) AI engines simultaneously with 
   - Phind
   - You.com
   - ChatGPT (No Direct Search)
+  - Grok
   - DuckDuckGo
   - Bing
   - Google
@@ -26,7 +27,6 @@ Simple web app to search multiple (customizable) AI engines simultaneously with 
 
 - [ ] Add more known AI search engines if URL params allow
   * Claude
-  * Grok
   * SourceGraph
   * https://yep.com/chat/?q=%s
   * https://sourcegraph.com/search?q=%s
