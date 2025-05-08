@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       id: "github",
       name: "GitHub (Code Repos)",
-      category: "Specialized",
+      category: "Code Search",
       urlTemplate: "https://github.com/search?q={query}",
     },
     {
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       id: "sourcegraph",
       name: "SourceGraph",
-      category: "Specialized",
+      category: "Code Search",
       urlTemplate: "https://sourcegraph.com/search?q={query}",
     },
 

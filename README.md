@@ -18,11 +18,13 @@ Simple web app to search multiple (customizable) AI engines simultaneously with 
   - Qwant (Privacy)
   - Wikipedia
   - WolframAlpha (Compute)
-  - GitHub (Code Repos)
   - Google Scholar
   - Semantic Scholar
   - Yep Chat
-  - SourceGraph
+  - Code Search
+    - GitHub (Code Repos)
+    - SourceGraph
+
 - Allow users to customize/save their preferred engine list (using localStorage)
 
 ## TODO
