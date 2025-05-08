@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       id: "github",
-      name: "GitHub (Code Repos)",
+      name: "GitHub",
       category: "Code Search",
       urlTemplate: "https://github.com/search?q={query}",
     },
@@ -213,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, {});
 
     // Define the order in which categories should appear (optional)
-    const categoryOrder = ["AI & Chat", "General", "Specialized", "Other"];
+    const categoryOrder = ["AI & Chat", "General", "Specialized", "Code Search", "Other"];
 
     // Remove the group role and aria-labelledby from the main container,
     // as fieldset/legend will handle grouping now.

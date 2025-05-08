@@ -31,6 +31,7 @@ Simple web app to search multiple (customizable) AI engines simultaneously with 
 
 - [ ] Support choose suitable engines using AI algorithms
   - Given search string or question, suggest which engines should be used (Opt-in Feature)
+
     Let user type in what the user is looking for.
     The AI could analyze the query and generate a good prompt, and then select the most appropriate search engines from the available list.
     This would go beyond simple keyword matching and attempt to understand the intent behind the query. It doesn't just match keywords but understands the context.
