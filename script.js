@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
       id: "chatgpt",
       name: "ChatGPT (No Direct Search)",
       category: "AI & Chat",
-      urlTemplate: "https://chatgpt.com/",
+      urlTemplate: "https://chatgpt.com/?q={query}&hints=search",
     },
     {
       id: "grok",
